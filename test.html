@@ -5,8 +5,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>CeeBox Test Page</title>
 <!-- ceebox and prereqs -->
-	<script type='text/javascript' src='js/jquery.js'></script>
-	<script type='text/javascript' src='js/jquery.swfobject.js' ></script>
+	<script type='text/javascript' src='js/jquery-1.7.1.min.js'></script>
+	<script type='text/javascript' src='js/jquery.swfobject.1-1-1.min.js' ></script>
 	<script type='text/javascript' src='js/jquery.metadata.js'></script>
 	<script type='text/javascript' src='js/jquery.color.js'></script>
     <script type='text/javascript' src='js/jquery.ceebox.js'></script>
@@ -14,35 +14,35 @@
     jQuery(document).ready(function(){
 		debugging = true;
 
-		$.fn.ceebox.videos.base.param.allowScriptAccess = "sameDomain" //added to kill the permissions problem
-		$.extend($.fn.ceebox.videos,{
-			uctv:{
-				siteRgx: /uctv\.tv\/search\-details/i, 
-				idRgx: /(?:showID=)([0-9]+)/i, 
-				src: "http://www.uctv.tv/player/player_uctv_bug.swf",
-				flashvars: {previewImage : "http://www.uctv.tv/images/programs/[id].jpg", movie : "rtmp://webcast.ucsd.edu/vod/mp4:[id]",videosize:0,buffer:1,volume:50,repeat:false,smoothing:true}
-			}
-		});
+		//$.fn.ceebox.videos.base.param.allowScriptAccess = "sameDomain" //added to kill the permissions problem
+		//$.extend($.fn.ceebox.videos,{
+		//	uctv:{
+		//		siteRgx: /uctv\.tv\/search\-details/i, 
+		//		idRgx: /(?:showID=)([0-9]+)/i, 
+		//		src: "http://www.uctv.tv/player/player_uctv_bug.swf",
+			//	flashvars: {previewImage : "http://www.uctv.tv/images/programs/[id].jpg", movie : "rtmp://webcast.ucsd.edu/vod/mp4:[id]",videosize:0,buffer:1,volume:50,repeat:false,smoothing:true}
+		//	}
+		//});
 		//$().ceebox(); //used to test to make sure the init call works.
-		//$(".ceebox").ceebox({boxColor:'#fff',borderColor:'#525252',textColor:'#333',videoJSON:"js/humor.json"});
-		$(".ceebox").ceebox({borderColor:'#dcdcdc',boxColor:"#fff"});
-		//$("map").ceebox({fadeOut:"slow",fadeIn:"slow",onload:function(){$("#cee_box").animate({backgroundColor:"#F00"},function(){$(this).animate({backgroundColor:"#fff"})});}});		
-		$("map").ceebox();		
-		$(".ceebox2").ceebox({unload:function(){$("body").css({background:"#ddf"})}});
+		$(".ceebox").ceebox({boxColor:'#fff',textColor:'#333'});
+		//$(".ceebox").ceebox({boxColor:"#fff",borderColor:"#000"}); Doesn't like borderColor
+		$("map").ceebox({fadeOut:"slow",fadeIn:"slow",onload:function(){$("#cee_box").animate({backgroundColor:"#F00"},function(){$(this).animate({backgroundColor:"#fff"})});}});		
+		//$("map").ceebox();		
+		//$(".ceebox2").ceebox({unload:function(){$("body").css({background:"#ddf"})}});
 		//window.console.log($.fn.ceebox.videos.colbertFull)
 		//$("body").ceebox(); //uncomment and every link on the page is in one gallery
-		var testhtml = "<a href='http://balsaman.org' title='Balsa Man'>Balsa Man</a>"
-		var testhtml2 = "<div style='padding:20px;text-align:center'><h2>Hi I am some content built as a javascript variable!</h2><p><a href='#' class='cee_close'>Close Me</a></p></div>"
-		$("#testlink").click(function(){
-			$.fn.ceebox.overlay();
-			$.fn.ceebox.popup(testhtml,{onload:true,htmlWidth:600,htmlHeight:450});
-			return false;		  
-		});
-		$("#testlink2").click(function(){
-			$.fn.ceebox.overlay();
-			$.fn.ceebox.popup(testhtml2,{width:600,height:400});
-			return false;
-		});
+		//var testhtml = "<a href='http://balsaman.org' title='Balsa Man'>Balsa Man</a>"
+		//var testhtml2 = "<div style='padding:20px;text-align:center'><h2>Hi I am some content built as a javascript variable!</h2><p><a href='#' class='cee_close'>Close Me</a></p></div>"
+		//$("#testlink").click(function(){
+		//	$.fn.ceebox.overlay();
+		//	$.fn.ceebox.popup(testhtml,{onload:true,htmlWidth:600,htmlHeight:450});
+		//	return false;		  
+		//});
+		//$("#testlink2").click(function(){
+		//	$.fn.ceebox.overlay();
+		//	$.fn.ceebox.popup(testhtml2,{width:600,height:400});
+		//	return false;
+		//});
 		//$.fn.ceebox.popup(testhtml,{onload:true,htmlWidth:600,htmlHeight:450});
 	});
     </script>
@@ -62,9 +62,13 @@
 <div id="wrap">
     <h1>CeeBox 2.1 Ugly test page</h1>
     <p>Yeah I know this page is ugly. Maybe later I'll throw together a better example page.</p><p> <em><strong>Note:</strong> if you run ceebox locally and call external video players you will get permissions errors unless you add $.fn.ceebox.videos.base.param.allowScriptAccess = "sameDomain" to your document ready</em></p>
+	<div style="display:none"><object width="640" height="360"><param name="movie" value="http://www.youtube.com/v/nZ_6MlTRVEE&hl=en_US&feature=player_embedded&version=3"></param><param name="allowFullScreen" value="true"></param><param name="allowScriptAccess" value="always"></param><embed src="http://www.youtube.com/v/nZ_6MlTRVEE&hl=en_US&feature=player_embedded&version=3" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" width="640" height="360"></embed></object></div>
+
+	
     <h2>Link list with multiple video/image/html</h2>
     <ul class="ceebox mixed {videoWidth:200}">
-    	<li><a href="http://www.youtube.com/watch?v=G_5htGZkp9g" title="Balsa Man 2009 Video" >YouTube: balsa man vid</a></li>
+    	<li><a href="http://www.youtube.com/watch?v=nZ_6MlTRVEE">test of ucsf video</a></li>
+		<li><a href="http://www.youtube.com/watch?v=G_5htGZkp9g" title="Balsa Man 2009 Video" >YouTube: balsa man vid</a></li>
         <li><a href="http://www.youtube.com/watch?v=__GhJl_UQg0#t=10s" title="Machine with oil" class="{videoGallery:false}" >Machine with Oil</a> set to not be in gallery</li>
         <li><a href="http://www.vimeo.com/5606758" title="Awesome Aquarium">link to vimeo video</a></li>
     	<li><a href="http://www.facebook.com/video/video.php?v=238358730483" class="{videoWidth:400,boxColor:'#bbf',borderColor:'#db0 #aa0',borderWidth:'12px'}" title="Lame Facebook Video">link to facebook video</a>  (videoWidth set to 400, boxColor set to a light blue, and borderColor set to orange via metadata)</li>

@@ -71,7 +71,7 @@ $.fn.ceebox.defaults = {
 	// color settings for background, text, and border. If these are set to blank then it uses css colors. If set here it overrides css. This becomes useful with metadata and color animations which allows you to change colors from link to link.
 	boxColor:"", //background color for ceebox.
 	textColor:"", //color for text in ceebox.
-	borderColor:"", //outside border color.
+	borderColor:"", //outside border color. New jQuery doesn't like this.
 	borderWidth: "3px", //the border on ceebox. Can be used like css ie,"4px 2px 4px 2px"
 	padding: 15, //ceebox padding
 	margin: 150, //minimum margin between ceebox inside content and browser frame (this does not count the padding and border; I know it's odd. I'll likely change how it works at some point)
@@ -122,7 +122,7 @@ $.fn.ceebox.videos = {
 	youtube: {
 		siteRgx : /youtube\.com\/watch/i,
 		idRgx: /(?:v=)([a-zA-Z0-9_\-]+)/i,
-		src : "http://www.youtube.com/v/[id]&hl=en&fs=1&autoplay=1"
+		src: "http://www.youtube.com/v/[id]?version=3&hl=en&fs=1&autoplay=1"
 	},
 	metacafe: {
 		siteRgx : /metacafe\.com\/watch/i, 
@@ -517,8 +517,8 @@ var Build = {
 						id = String(lastItem(v.idRgx.exec(cb.href)));
 					}
 					rtn.src = (v.src) ? v.src.replace("[id]",id) : rtn.src;
-					var startTimeMinReg = new RegExp(/(?:t=)*([0-9]+)m/i);
-					var startTimeSecReg = new RegExp(/(?:t=)*([0-9]+)s/i);
+					var startTimeMinReg = new RegExp(/(?:t=)+([0-9]+)m/i);
+					var startTimeSecReg = new RegExp(/(?:t=)+([0-9]+)s/i);
 					var startTimeMin = startTimeMinReg.exec(cb.href);
 					var startTimeSec = startTimeSecReg.exec(cb.href);
 					var startTime = 0;
