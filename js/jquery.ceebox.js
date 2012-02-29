@@ -293,17 +293,18 @@ $.fn.ceebox.popup = function(content,opts) {
 		var borderColor = cssParse(opts.borderColor,reg);
 		animOpts = $.extend(animOpts,{
 			borderTopColor:borderColor[0],
-			borderRightColor:borderColor[1],
-			borderBottomColor:borderColor[2],
-			borderLeftColor:borderColor[3]
+			//borderRightColor:borderColor[1],
+			//borderBottomColor:borderColor[2],
+			//borderLeftColor:borderColor[3]
 		});
 	}
+	debug(animOpts);
 	animOpts = (opts.textColor) ? $.extend(animOpts,{color:opts.textColor}): animOpts;
 	animOpts = (opts.boxColor) ? $.extend(animOpts,{backgroundColor:opts.boxColor}): animOpts;
 	
 	// 4. animate ceebox
 	$("#cee_box").animate(animOpts,opts.animSpeed,opts.easing,function(){
-
+			
 			// 5. append content once animation finishes
 			var children = $(this).append(content).children().hide();
 			var len = children.length;

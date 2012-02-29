@@ -8,7 +8,7 @@
 	<script type='text/javascript' src='js/jquery-1.7.1.min.js'></script>
 	<script type='text/javascript' src='js/jquery.swfobject.1-1-1.min.js' ></script>
 	<script type='text/javascript' src='js/jquery.metadata.js'></script>
-	<script type='text/javascript' src='js/jquery.color.js'></script>
+	
     <script type='text/javascript' src='js/jquery.ceebox.js'></script>
     <script type='text/javascript' >
     jQuery(document).ready(function(){
@@ -24,8 +24,8 @@
 		//	}
 		//});
 		//$().ceebox(); //used to test to make sure the init call works.
-		$(".ceebox").ceebox({boxColor:'#fff',textColor:'#333'});
-		//$(".ceebox").ceebox({boxColor:"#fff",borderColor:"#000"}); Doesn't like borderColor
+		//$(".ceebox").ceebox({boxColor:'#fff',textColor:'#333'});
+		$(".ceebox").ceebox({boxColor:"#fff",borderColor:"#000"}); //Doesn't like borderColor
 		$("map").ceebox({fadeOut:"slow",fadeIn:"slow",onload:function(){$("#cee_box").animate({backgroundColor:"#F00"},function(){$(this).animate({backgroundColor:"#fff"})});}});		
 		//$("map").ceebox();		
 		//$(".ceebox2").ceebox({unload:function(){$("body").css({background:"#ddf"})}});
