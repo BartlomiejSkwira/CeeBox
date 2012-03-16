@@ -1,7 +1,7 @@
 //ceebox
 /*
- * CeeBox 2.1.5.1 jQuery Plugin
- * Requires jQuery 1.3.2 and swfobject.jquery.js plugin to work
+ * CeeBox 2.1.5.2 jQuery Plugin
+ * Requires at least jQuery 1.3.2 and swfobject.jquery.js plugin to work
  * Code hosted on GitHub (http://github.com/catcubed/ceebox) Please visit there for version history information
  * By Colin Fahrion (http://www.catcubed.com)
  * Inspiration for ceebox comes from Thickbox (http://jquery.com/demo/thickbox/) and Videobox (http://videobox-lb.sourceforge.net/)
@@ -19,7 +19,7 @@
 */
 
 (function($) {
-$.ceebox = {version:"2.1.5.1"};
+$.ceebox = {version:"2.1.5.2"};
 
 //--------------------------- CEEBOX FUNCTION -------------------------------------
 $.fn.ceebox = function(opts){
@@ -71,7 +71,7 @@ $.fn.ceebox.defaults = {
 	// color settings for background, text, and border. If these are set to blank then it uses css colors. If set here it overrides css. This becomes useful with metadata and color animations which allows you to change colors from link to link.
 	boxColor:"", //background color for ceebox.
 	textColor:"", //color for text in ceebox.
-	borderColor:"", //outside border color. New jQuery doesn't like this.
+	//borderColor:"", //outside border color. FIX New jQuery doesn't like this so either fix or remove.
 	borderWidth: "3px", //the border on ceebox. Can be used like css ie,"4px 2px 4px 2px"
 	padding: 15, //ceebox padding
 	margin: 150, //minimum margin between ceebox inside content and browser frame (this does not count the padding and border; I know it's odd. I'll likely change how it works at some point)
@@ -119,11 +119,6 @@ $.fn.ceebox.videos = {
 		idRgx: /(?:v=)([a-zA-Z0-9_]+)/i,
 		src: "http://www.facebook.com/v/[id]"
 	},
-	youtube: {
-		siteRgx : /youtube\.com\/watch/i,
-		idRgx: /(?:v=)([a-zA-Z0-9_\-]+)/i,
-		src: "http://www.youtube.com/v/[id]?version=3&hl=en&fs=1&autoplay=1"
-	},
 	metacafe: {
 		siteRgx : /metacafe\.com\/watch/i, 
 		idRgx: /(?:watch\/)([a-zA-Z0-9_]+)/i,
@@ -140,11 +135,6 @@ $.fn.ceebox.videos = {
 		idRgx: /(?:\/)([0-9]+)/i,
 		src : "http://www.spike.com/efp",
 		flashvars : {flvbaseclip:"[id]"}
-	},
-	vimeo: {
-		siteRgx : /vimeo\.com\/[0-9]+/i,
-		idRgx: /(?:\.com\/)([a-zA-Z0-9_]+)/i,
-		src : "http://www.vimeo.com/moogaloop.swf?clip_id=[id]&server=vimeo.com&show_title=1&show_byline=1&show_portrait=0&color=&fullscreen=1"
 	},
 	dailymotion: {
 		siteRgx : /dailymotion\.com\/video/i, //one issue is that some dailymotion vids are really atom films
@@ -203,7 +193,7 @@ $.fn.ceebox.overlay = function(opts) {
 			marginTop: pos.mtop + 'px',
 			opacity:0,
 			borderWidth:opts.borderWidth,
-			borderColor:opts.borderColor,
+			//borderColor:opts.borderColor, FIX commented out for now as border color is broken with latest jQuery
 			backgroundColor:opts.boxColor,
 			color:opts.textColor
 		};
@@ -279,25 +269,30 @@ $.fn.ceebox.popup = function(content,opts) {
 	base.unload = opts.unload;
 
 	// 3. setup animation based on opts
-	var pos = boxPos(opts);//grab margins
-	
+	var pos = boxPos(opts);//grab margins;
 	var animOpts = {
 			marginLeft: pos.mleft,
 			marginTop: pos.mtop,
 			width: opts.width + "px",
-			height: opts.height + "px",
-			borderWidth:opts.borderWidth
+			height: opts.height + "px"
 	};
-	if (opts.borderColor) {
+	var currentBorderWidth = $("#cee_box").css("borderLeftWidth");
+	if (currentBorderWidth != opts.borderWidth) {
+		animOpts = (opts.boxColor) ? $.extend(animOpts,{borderWidth:opts.borderWidth}): animOpts;
+	}
+	
+	/* FIX killed as border color is broken with latest jQuery
+	if (opts.borderColor) { 
 		var reg = /#[1-90a-f]+/gi;
 		var borderColor = cssParse(opts.borderColor,reg);
 		animOpts = $.extend(animOpts,{
 			borderTopColor:borderColor[0],
-			//borderRightColor:borderColor[1],
-			//borderBottomColor:borderColor[2],
-			//borderLeftColor:borderColor[3]
+			borderRightColor:borderColor[1],
+			borderBottomColor:borderColor[2],
+			borderLeftColor:borderColor[3]
 		});
-	}
+	} */
+	
 	debug(animOpts);
 	animOpts = (opts.textColor) ? $.extend(animOpts,{color:opts.textColor}): animOpts;
 	animOpts = (opts.boxColor) ? $.extend(animOpts,{backgroundColor:opts.boxColor}): animOpts;
@@ -356,6 +351,7 @@ $.fn.ceebox.onload = function(opts){
 //--------------------------- Init function which sets up global variables ----------------------------------
 var base = {}; //global private variable holder
 function init(elem,opts,selector) {
+	//FIX need to figure out a way to make Youttube and Vimeo launch as iframe.
 	base.vidRegex = function(){ //builds single regex object from the every siteRgx in the ceebox.videos public variable
 		var regStr = "";
 		$.each($.fn.ceebox.videos,function(i,v){ 
@@ -373,6 +369,7 @@ function init(elem,opts,selector) {
 	if (selector != false) {$(elem).each(function(i){ceeboxLinkSort(this,i,opts,selector);});} //as long as a selector was passed, this sets up all the links
 	
 	//adds click functionality via jquery live event bubbling
+	//FIX needs to be switched to use new on() function
 	$(elem).live("click", function(e){
 		var tgt = $(e.target).closest("[href]");
 		var tgtData = tgt.data("ceebox");
@@ -453,8 +450,16 @@ var BoxAttr = function(cblink,o) {
 	var w = o[o.type + "Width"]; //width
 	var h = o[o.type + "Height"]; //height
 	var r = o[o.type + "Ratio"] || w/h; //ratio
-
-	//grab options form rel
+	
+	//force width/height/ratio to be video for youtube & vimeo since they are being done by iframe now. FIX Bit of a kludge as this kills the modularity of this constructor.
+	var href = $(cblink).attr("href");
+	var domain = href.match(/[a-zA-Z0-9_\.]+\.[a-zA-Z]{2,4}/i);
+	if (domain = "youtube.com" || "www.youtube.com" || "vimeo.com" || "www.vimeo.com") {
+		r = o["videoRatio"];
+		w = o["videoWidth"];
+		h = o["videoHeight"];
+	}
+	//grab options from rel
 	var rel = $(cblink).attr("rel");
 	if (rel && rel!== "") {
 		var m = {};
@@ -488,7 +493,7 @@ var BoxAttr = function(cblink,o) {
 	
 	// set all important values to this
 	this.modal = o.modal;
-	this.href = $(cblink).attr("href");
+	this.href = href;
 	this.title = $(cblink).attr("title") || cblink.t || ""; //.t is used for ceetip
 	this.titlebox = (o.titles) ? "<div id='cee_title'><h2>"+this.title+"</h2></div>" : "";
 	this.width = w;
@@ -580,9 +585,21 @@ var Build = {
 			this.action = function(){ $("#cee_ajax").load(ajx);};
 			this.content = this.titlebox + "<div id='cee_ajax' style='width:"+(this.width-30)+"px;height:"+(this.height-20)+"px'></div>";
 		} else {
+			var iframeclass = "";
+			//test for youtube and vimeo create iframe player specific variables for each
+			//FIX note that for some reason youtube's player covers up the next previous buttons. I don't know why or what to do about it yet.
+			if (m[0] == "www.youtube.com") {
+				iframeclass="youtube-player";
+				var IDregex = new RegExp(/(?:v=)([a-zA-Z0-9_\-]+)/i);
+				var id = String(lastItem(IDregex.exec(h)));
+				h = "http://www.youtube.com/embed/" + id;
+			} else if (m[0] == "vimeo.com" || m[0] == "www.vimeo.com") {
+				var IDregex = new RegExp(/(?:\.com\/)([a-zA-Z0-9_]+)/i);
+				var id = String(lastItem(IDregex.exec(h)));
+				h = "http://player.vimeo.com/video/" + id + "?color=ff9933";
+			}
 			$("#cee_iframe").remove();
-			this.content = this.titlebox + "<iframe frameborder='0' hspace='0' src='"+h+"' id='cee_iframeContent' name='cee_iframeContent"+Math.round(Math.random()*1000)+"' onload='jQuery.fn.ceebox.onload()' style='width:"+(this.width)+"px;height:"+(this.height)+"px;' > </iframe>";
-			
+			this.content = this.titlebox + "<iframe src='"+h+"' frameborder='0' type='text/html' id='cee_iframeContent' class='"+iframeclass+"' name='cee_iframeContent"+Math.round(Math.random()*1000)+"' onload='jQuery.fn.ceebox.onload()' style='width:"+(this.width)+"px;height:"+(this.height)+"px;' webkitAllowFullScreen mozallowfullscreen allowFullScreen> </iframe>";
 		}
 	}
 };
