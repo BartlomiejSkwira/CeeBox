@@ -23,9 +23,10 @@
 			//	flashvars: {previewImage : "http://www.uctv.tv/images/programs/[id].jpg", movie : "rtmp://webcast.ucsd.edu/vod/mp4:[id]",videosize:0,buffer:1,volume:50,repeat:false,smoothing:true}
 		//	}
 		//});
+		//});
 		//$().ceebox(); //used to test to make sure the init call works.
 		//$(".ceebox").ceebox({boxColor:'#fff',textColor:'#333'});
-		$(".ceebox").ceebox({boxColor:"#fff"}); //Doesn't like borderColor
+		$(".ceebox").ceebox({boxColor:"#fff",html:false}); //Doesn't like borderColor
 		$("map").ceebox({fadeOut:"slow",fadeIn:"slow",onload:function(){$("#cee_box").animate({backgroundColor:"#F00"},function(){$(this).animate({backgroundColor:"#fff"})});}});		
 		//$("map").ceebox();		
 		//$(".ceebox2").ceebox({unload:function(){$("body").css({background:"#ddf"})}});

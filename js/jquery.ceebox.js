@@ -415,10 +415,20 @@ var ceeboxLinkSort = function(parent,parentId,opts,selector) {
 		var alink = this;
 		var metadata = $.metadata ? $(alink).metadata() : false;
 		var linkOpts = metadata ? $.extend({}, opts, metadata) : opts; // metadata plugin support (applied on link element)
+		var href = $(alink).attr("href");
+		var rel = $(alink).attr("rel");
+		var domain = href.match(/[a-zA-Z0-9_\.]+\.[a-zA-Z]{2,4}/i);
 		
+		//run link through urlMatch to see what type it is
 		$.each(urlMatch, function(type) {
-			
-			if (urlMatch[type]($(alink).attr("href"),$(alink).attr("rel")) && linkOpts[type]) {	
+			//if is triggered if the type is correct; also ignores any link not allowed, ie. no html links if html:false
+			//FIX this is janky
+			var allowedType = linkOpts[type];
+			if ((domain = "youtube.com" || "www.youtube.com" || "vimeo.com" || "www.vimeo.com") && linkOpts["video"]) {
+				allowedType = true;
+				debug(allowedType)
+			}
+			if (urlMatch[type](href,rel) && allowedType) {	
 				var gallery = false;
 				// 2. set up array of gallery links
 				if (linkOpts[type + "Gallery"] === true) {
