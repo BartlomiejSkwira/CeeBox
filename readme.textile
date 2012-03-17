@@ -34,6 +34,9 @@ Please refer to the following link for instructions.
 
 h2. Release History
 
+h3. 2.1.5.2 Update branch
+Haven't moved this one to the main branch yet as it's a bit kludgy but it seems to work. Updated to use youtube and vimeo's iframe embeds
+
 h3. 2.1.5 Minor Improvement
 * can now force CeeBox to treat a link as an image with rel="image" (similarly rel="video" forces CeeBox to treat it as a video)
 

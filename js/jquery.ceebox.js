@@ -293,7 +293,6 @@ $.fn.ceebox.popup = function(content,opts) {
 		});
 	} */
 	
-	debug(animOpts);
 	animOpts = (opts.textColor) ? $.extend(animOpts,{color:opts.textColor}): animOpts;
 	animOpts = (opts.boxColor) ? $.extend(animOpts,{backgroundColor:opts.boxColor}): animOpts;
 	
@@ -424,9 +423,8 @@ var ceeboxLinkSort = function(parent,parentId,opts,selector) {
 			//if is triggered if the type is correct; also ignores any link not allowed, ie. no html links if html:false
 			//FIX this is janky
 			var allowedType = linkOpts[type];
-			if ((domain = "youtube.com" || "www.youtube.com" || "vimeo.com" || "www.vimeo.com") && linkOpts["video"]) {
+			if (domain == "youtube.com" || domain == "www.youtube.com" || domain == "vimeo.com" || domain == "www.vimeo.com") {
 				allowedType = true;
-				debug(allowedType)
 			}
 			if (urlMatch[type](href,rel) && allowedType) {	
 				var gallery = false;
@@ -464,7 +462,7 @@ var BoxAttr = function(cblink,o) {
 	//force width/height/ratio to be video for youtube & vimeo since they are being done by iframe now. FIX Bit of a kludge as this kills the modularity of this constructor.
 	var href = $(cblink).attr("href");
 	var domain = href.match(/[a-zA-Z0-9_\.]+\.[a-zA-Z]{2,4}/i);
-	if (domain = "youtube.com" || "www.youtube.com" || "vimeo.com" || "www.vimeo.com") {
+	if (domain = "youtube.com" || domain == "www.youtube.com" || domain == "vimeo.com" || domain == "www.vimeo.com") {
 		r = o["videoRatio"];
 		w = o["videoWidth"];
 		h = o["videoHeight"];
@@ -589,7 +587,7 @@ var Build = {
 	html: function() {
 		//test whether or not content is iframe or ajax
 		var h = this.href,r = this.rel;
-		var m = [h.match(/[a-zA-Z0-9_\.]+\.[a-zA-Z]{2,4}/i),h.match(/^http:+/),(r) ? r.match(/^iframe/) : false];
+		var m = [h.match(/[a-zA-Z0-9_\.]+\.[a-zA-Z]{2,4}/i),h.match(/^https?:+/),(r) ? r.match(/^iframe/) : false];
 		if ((document.domain == m[0] && m[1] && !m[2]) || (!m[1] && !m[2])) { //if linked to same domain and not iframe than it's an ajax link
 			var id, ajx = (id = h.match(/#[a-zA-Z0-9_\-]+/)) ? String(h.split("#")[0] + " " + id) : h;
 			this.action = function(){ $("#cee_ajax").load(ajx);};
@@ -602,11 +600,11 @@ var Build = {
 				iframeclass="youtube-player";
 				var IDregex = new RegExp(/(?:v=)([a-zA-Z0-9_\-]+)/i);
 				var id = String(lastItem(IDregex.exec(h)));
-				h = "http://www.youtube.com/embed/" + id;
+				h = "http://www.youtube.com/embed/" + id + "?wmode=transparent";
 			} else if (m[0] == "vimeo.com" || m[0] == "www.vimeo.com") {
 				var IDregex = new RegExp(/(?:\.com\/)([a-zA-Z0-9_]+)/i);
 				var id = String(lastItem(IDregex.exec(h)));
-				h = "http://player.vimeo.com/video/" + id + "?color=ff9933";
+				h = "http://player.vimeo.com/video/" + id + "?color=ff9933&amp;wmode=transparent";
 			}
 			$("#cee_iframe").remove();
 			this.content = this.titlebox + "<iframe src='"+h+"' frameborder='0' type='text/html' id='cee_iframeContent' class='"+iframeclass+"' name='cee_iframeContent"+Math.round(Math.random()*1000)+"' onload='jQuery.fn.ceebox.onload()' style='width:"+(this.width)+"px;height:"+(this.height)+"px;' webkitAllowFullScreen mozallowfullscreen allowFullScreen> </iframe>";
@@ -733,20 +731,6 @@ function getSmlr(a,b) {return ((a && a < b) || !b) ? a : b;}
 function isFunction(a) {return typeof a == 'function';}
 function lastItem(a) {var l = a.length;return (l > 1) ? a[l-1] : a;}
 
-//------------------------------ Debug function ----------------------------------------------
-function debug(a,tag,opts) {
-	//must turn on by setting debugging to true as a global variable
-	if (debugging === true) {var bugs="", header = "[ceebox](" + (tag||"")  + ")";
-		($.isArray(a) || typeof a == 'object' || typeof a == 'function') ? $.each(a, function(i, val) { bugs = bugs +i + ":" + val + ", ";}) : bugs = a;
-		
-		if (window.console && window.console.log) {
-			window.console.log(header + bugs);
-		} else {
-			if ($("#debug").size() === 0) {$("<ul id='debug'></ul>").appendTo("body").css({border:"1px solid #ccf",position:"fixed",top:"10px",right:"10px",width:"300px",padding:"10px",listStyle:"square"});
-			$("<li>").css({margin:"0 0 5px"}).appendTo("#debug").append(header).wrapInner("<b></b>").append(" " + bugs);}
-		}
-	}
-}
 
 
 })(jQuery);
