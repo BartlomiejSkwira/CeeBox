@@ -462,7 +462,7 @@ var BoxAttr = function(cblink,o) {
 	//force width/height/ratio to be video for youtube & vimeo since they are being done by iframe now. FIX Bit of a kludge as this kills the modularity of this constructor.
 	var href = $(cblink).attr("href");
 	var domain = href.match(/[a-zA-Z0-9_\.]+\.[a-zA-Z]{2,4}/i);
-	if (domain = "youtube.com" || domain == "www.youtube.com" || domain == "vimeo.com" || domain == "www.vimeo.com") {
+	if (domain == "youtube.com" || domain == "www.youtube.com" || domain == "vimeo.com" || domain == "www.vimeo.com") {
 		r = o["videoRatio"];
 		w = o["videoWidth"];
 		h = o["videoHeight"];
