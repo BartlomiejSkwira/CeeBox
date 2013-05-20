@@ -371,8 +371,9 @@ function init(elem,opts,selector) {
 	
 	if (selector != false) {$(elem).each(function(i){ceeboxLinkSort(this,i,opts,selector);});} //as long as a selector was passed, this sets up all the links
 	
-	//adds click functionality via jquery live event bubbling
-	$(elem).live("click", function(e){
+	//adds click functionality via jquery on event bubbling
+	
+	elem.on("click", function(e){
 		var tgt = $(e.target).closest("[href]");
 		var tgtData = tgt.data("ceebox");
 		if (tgtData) {
